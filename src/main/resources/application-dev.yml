@@ -26,8 +26,7 @@ server:
   # 내장 톰캣 서버 포트 번호 변경
   port: 80
 
-
-
-
-
-
+# 개발 환경시 로깅 레벨 설정
+logging:
+  level:
+    root: info

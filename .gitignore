@@ -6,6 +6,8 @@ build/
 !**/src/test/**/build/
 
 ### SMATE ###
+./logs
+./logs/**
 .env
 application-local.yml
 application-prod.yml
