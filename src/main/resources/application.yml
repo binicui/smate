@@ -43,9 +43,3 @@ server:
       charset: UTF-8
       enabled: true
       force: true
-
-# 로깅 출력 패턴 설정
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %magenta(traceId=%X{traceId}) [%thread] %highlight(%-5level) %cyan(%logger{36}.%M) - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [traceId=%X{traceId}] [%thread] %-5level %logger{36}.%M - %msg%n"
