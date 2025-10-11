@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 15초마다 설정 파일을 확인 후, 변경시 갱신 -->
+<configuration scan="true" scanPeriod="15 seconds">
+    <!-- 스프링 환경 변수 -->
+    <springProperty scope="context" name="PROFILE" source="spring.profiles.active"/>
+    <springProperty scope="context" name="LEVEL" source="logging.level.root"/>
+
+    <!-- 로그 파일 관련 공통 속성 -->
+    <property name="LOG_DIR" value="./logs"/>
+    <property name="LOG_PATH" value="${LOG_DIR}/${PROFILE}"/>
+    <property name="LOG_FILE" value="smate-app.${LEVEL}"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [traceId=%X{traceId}] [%thread] %-5level %logger{36}.%M - %msg%n"/>
+
+    <!-- 로그 파일 명에 사용될 타임스탬프 -->
+    <timestamp key="BY_DATE" datePattern="yyyyMMdd"/>
+
+    <!-- 콘솔 로그 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %magenta(traceId=%X{traceId}) [%thread] %highlight(%-5level) %cyan(%logger{36}.%M) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 로그 파일 (INFO) -->
+    <appender name="FILE-INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${BY_DATE}_${LOG_FILE}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyyMMdd}_${LOG_FILE}.${LEVEL}_%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 로그 파일 (WARN) -->
+    <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${BY_DATE}_${LOG_FILE}.${LEVEL}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyyMMdd}_${LOG_FILE}.${LEVEL}_%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 로그 파일 (ERROR) -->
+    <appender name="FILE-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${BY_DATE}_${LOG_FILE}.${LEVEL}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/%d{yyyyMMdd}_${LOG_FILE}.${LEVEL}_%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+
+    <root level="${LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE-INFO"/>
+        <appender-ref ref="FILE-WARN"/>
+        <appender-ref ref="FILE-ERROR"/>
+    </root>
+</configuration>
